@@ -3,33 +3,18 @@
     <h1>{{ title }}</h1>
     <h3>{{ msg }}</h3>
     <button @onClick="updateResponse">Refresh</button>
-    <pre>{{ this.response }}</pre>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { VNode, Component } from 'vue';
-import axios from 'axios';
 
 const Component = Vue.extend({
   data() {
     return {
-      response: 'default response',
       msg: 'default msg',
       title: 'News Sucks',
-      errors: Array(),
-      rssUrl: 'http://localhost:3000/rssString',
     };
-  },
-  created() {
-    axios.get(this.rssUrl)
-    .then((res) => {
-      this.response = res.data;
-      this.updateFields();
-    })
-    .catch((e) => {
-      this.errors.push(e);
-    });
   },
   methods: {
     updateFields() {
@@ -38,13 +23,11 @@ const Component = Vue.extend({
   },
   computed: {
     updateResponse(): string {
-      // this.response = 'direct replacement: dummy response';
-      // return this.response;
       return '';
     },
   },
   render(createElement): VNode {
-    return createElement('div', this.response);
+    return createElement('div');
   },
 });
 
