@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VNode } from 'vue';
+import Vue, { VNode, Component } from 'vue';
 import axios from 'axios';
 
 const Component = Vue.extend({
