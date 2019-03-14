@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
     <VisualContainer/>
     <MainContainer msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>

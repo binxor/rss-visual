@@ -1,6 +1,5 @@
 <template>
   <div class>
-    <h1>Visual Container rendered correctly</h1>
     <chartComponent :series="this.initSeries">Chart component will replace this text</chartComponent>
     <pre>ERRORS: {{ this.errors }}</pre>
     <pre>{{ this.response }}</pre>
