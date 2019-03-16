@@ -1,10 +1,15 @@
 <template>
   <div class>
+    <br/>
     <span v-if="this.resolved">
       <chartComponent :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
     </span>
-    <pre>ERRORS: {{ this.errors }}</pre>
-    <pre>{{ this.response }}</pre>
+    <div v-if="this.errors.length > 0">
+      <h3>{{errorMsg}}</h3>
+      <div style="border: 1px solid grey; border-radius:10px;">
+        ERRORS: <pre>{{ this.errors }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,9 +21,10 @@ import chartComponent from '@/components/chartComponent.vue';
 const Component = Vue.extend({
     data: () => {
         return {
-            response: {'words':'default default default response response '},
+            response: {'words':'default default default response response'},
             resolved: false,
             errors: Array(),
+            errorMsg: '',
             rssUrl: 'http://localhost:3000/rssString',
         };
     },
@@ -29,6 +35,7 @@ const Component = Vue.extend({
             this.resolved = true;
         })
         .catch((e) => {
+            this.errorMsg = "We haven't heard back from our REST API, so here's a preview..."
             this.errors.push(e);
         });
     },

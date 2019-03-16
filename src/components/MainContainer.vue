@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ title }}</h1>
-    <h3>{{ msg }}</h3>
     <button @onClick="updateResponse">Refresh</button>
   </div>
 </template>
@@ -12,8 +11,8 @@ import Vue, { VNode, Component } from 'vue';
 const Component = Vue.extend({
   data() {
     return {
-      msg: 'default msg',
-      title: 'News Sucks',
+      msg: '',
+      title: 'Welcome to Your Daily News Summary',
     };
   },
   methods: {

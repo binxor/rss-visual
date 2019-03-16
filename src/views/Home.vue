@@ -1,7 +1,7 @@
 <template>
   <div class="home">
+    <MainContainer msg=""/>
     <VisualContainer/>
-    <MainContainer msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>
 </template>
 
