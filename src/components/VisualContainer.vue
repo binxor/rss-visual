@@ -16,7 +16,7 @@ import chartComponent from '@/components/chartComponent.vue';
 const Component = Vue.extend({
     data: () => {
         return {
-            response: {'words':'default response'},
+            response: {'words':'default default default response response '},
             resolved: false,
             errors: Array(),
             rssUrl: 'http://localhost:3000/rssString',
