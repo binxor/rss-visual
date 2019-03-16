@@ -1,6 +1,8 @@
 <template>
   <div class>
-    <chartComponent :series="this.initSeries">Chart component will replace this text</chartComponent>
+    <span v-if="this.resolved">
+      <chartComponent :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
+    </span>
     <pre>ERRORS: {{ this.errors }}</pre>
     <pre>{{ this.response }}</pre>
   </div>
@@ -14,7 +16,8 @@ import chartComponent from '@/components/chartComponent.vue';
 const Component = Vue.extend({
     data: () => {
         return {
-            response: 'default response',
+            response: {'words':'default response'},
+            resolved: false,
             errors: Array(),
             rssUrl: 'http://localhost:3000/rssString',
         };
@@ -23,14 +26,11 @@ const Component = Vue.extend({
         axios.get(this.rssUrl)
         .then((res) => {
             this.response = res.data;
-            // this.updateFields();
+            this.resolved = true;
         })
         .catch((e) => {
             this.errors.push(e);
         });
-    },
-    render(createElement): VNode {
-        return createElement('div', this.response);
     },
     components: {
         chartComponent,
