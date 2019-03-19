@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ title }}</h1>
-    <button @onClick="updateResponse">Refresh</button>
   </div>
 </template>
 
@@ -18,11 +17,6 @@ const Component = Vue.extend({
   methods: {
     updateFields() {
       this.msg = 'RSS Data Retrieved';
-    },
-  },
-  computed: {
-    updateResponse(): string {
-      return '';
     },
   },
   render(createElement): VNode {

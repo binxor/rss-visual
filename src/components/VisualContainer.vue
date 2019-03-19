@@ -4,8 +4,10 @@
     <div v-if="this.errors.length > 0">
       <h3 id="errorMessage">{{errorMsg}}</h3>
     </div>
+    <button v-on:click="updateResponse('business')">Business</button>
+    <button v-on:click="updateResponse('science')">Science</button>
     <span v-if="this.resolved">
-      <chartComponent :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
+      <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
     </span>
     <div v-if="this.errors.length > 0">
       <div style="border: 1px solid grey; border-radius:10px;">
@@ -23,11 +25,13 @@ import chartComponent from '@/components/chartComponent.vue';
 const Component = Vue.extend({
     data: () => {
         return {
+            chartKey: 0,
             response: {'words':'default default default response response'},
             resolved: false,
             errors: Array(),
             errorMsg: '',
             rssUrl: 'http://localhost:3000/rssString',
+            src: '',
         };
     },
     created() {
@@ -42,6 +46,21 @@ const Component = Vue.extend({
             this.response = {words: 'U.S. House panel launches probe obstruction Trump Presidential hopeful Booker, Selma, U.S. failing people Democrats votes block Trump\'s border emergency U.S. Senate Trump big U.S. savings curbing joint South Korea military drills U.S. agency probing fatal Tesla crashes Florida Sunday Ostrich jacket, fake rallies, therapy dogs odd scenes Trump-Russia probe White House host CEOs workforce advisory meeting Trump slams Mueller, mocks critics fiery two-hour speech Bernie Sanders personal hits 2020 campaign trail Trump vows executive order requiring \'free speech\' colleges Explainer: Trump-Russia probe, collusion crime? House panel demands Kushner clearance details White House Washington\'s Inslee puts climate change center presidential bid Centrist Democrats stray votes, roiling House majority party Manafort seeks sentence guidelines Virginia case Warmbier parents blast \'evil\' North Korea regime Trump praises Kim Factbox: Democratic presidential contenders jump 2020 race Warmbier parents blast \'evil\' North Korea regime Trump praises Kim Factbox: Democrats Congress aim Trump multiple probes U.S. increases pressure Maduro sanctions, revokes visas associates'};
             this.resolved = true;
         });
+    },
+    methods: {
+      updateResponse(src: string){
+        axios.get(this.rssUrl+'/'+src)
+        .then((res) => {
+            this.response = res.data;
+            this.resolved = true;
+            this.chartKey += 1;
+            this.errors = [];
+        })
+        .catch((e) => {
+            this.errorMsg = 'This source isn\'t responding.';
+            this.errors.push(e);
+        });
+      },
     },
     components: {
         chartComponent,
@@ -64,6 +83,16 @@ const Component = Vue.extend({
           }];
         },
     },
+   watch: {
+    response: {
+      handler(val){
+        this.resolved = false;
+        this.resolved = true;
+        this.$forceUpdate();
+      },
+      deep: true,
+    },
+  },
 });
 
 export default Component;
