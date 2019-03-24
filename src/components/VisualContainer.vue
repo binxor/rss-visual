@@ -1,11 +1,11 @@
 <template>
   <div class>
-    <br/>
     <div v-if="this.errors.length > 0">
       <h3 id="errorMessage">{{errorMsg}}</h3>
     </div>
-    <button v-on:click="updateResponse('business')">Business</button>
-    <button v-on:click="updateResponse('science')">Science</button>
+    <button :key=b.key v-for='b of buttons' 
+      v-on:click="updateResponse(b.key)">{{b.display}}</button>
+    <br/><br/>
     <span v-if="this.resolved">
       <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
     </span>
@@ -25,8 +25,21 @@ import chartComponent from '@/components/chartComponent.vue';
 const Component = Vue.extend({
     data: () => {
         return {
+            buttons: [
+              {key: 'business', display: 'Business'},
+              {key: 'company', display: 'Company'},
+              {key: 'health', display: 'Health'},
+              {key: 'lifestyle', display: 'Lifestyle'},
+              {key: 'odd', display: 'Odd'},
+              {key: 'politics', display: 'Politics'},
+              {key: 'science', display: 'Science'},
+              {key: 'security', display: 'Security'},
+              {key: 'technology', display: 'Technology'},
+              {key: 'top', display: 'Top'},
+              {key: 'world', display: 'World'},
+            ],
             chartKey: 0,
-            response: {'words':'default default default response response'},
+            response: {words: 'default default default response response'},
             resolved: false,
             errors: Array(),
             errorMsg: '',
@@ -48,8 +61,8 @@ const Component = Vue.extend({
         });
     },
     methods: {
-      updateResponse(src: string){
-        axios.get(this.rssUrl+'/'+src)
+      updateResponse(src: string) {
+        axios.get(this.rssUrl + '/' + src)
         .then((res) => {
             this.response = res.data;
             this.resolved = true;
@@ -85,7 +98,7 @@ const Component = Vue.extend({
     },
    watch: {
     response: {
-      handler(val){
+      handler(val) {
         this.resolved = false;
         this.resolved = true;
         this.$forceUpdate();
