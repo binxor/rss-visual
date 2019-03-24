@@ -6,6 +6,9 @@
     <button :key=b.key v-for='b of buttons' 
       v-on:click="updateResponse(b.key)">{{b.display}}</button>
     <br/><br/>
+    <span v-if="this.sentimentResolved">
+      <leaderboardComponent :key="leaderKey" v-bind:sentimentResponse="this.sentimentResponse">Leaderboard will replace this text</leaderboardComponent>
+    </span>
     <span v-if="this.resolved">
       <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
     </span>
@@ -21,6 +24,7 @@
 import Vue, { VNode } from 'vue';
 import axios from 'axios';
 import chartComponent from '@/components/chartComponent.vue';
+import leaderboardComponent from '@/components/leaderboardComponent.vue';
 
 const Component = Vue.extend({
     data: () => {
@@ -39,11 +43,23 @@ const Component = Vue.extend({
               {key: 'world', display: 'World'},
             ],
             chartKey: 0,
+            errorMsg: '',
+            errors: Array(),
+            leaderKey: 0,
             response: {words: 'default default default response response'},
             resolved: false,
-            errors: Array(),
-            errorMsg: '',
             rssUrl: 'http://localhost:3000/rssString',
+            sentimentResolved: false,
+            sentimentResponse: {
+              "SentimentScore": {
+                "Mixed": 0, 
+                "Positive": 0, 
+                "Neutral": 0, 
+                "Negative": 0
+              }, 
+              "Sentiment": "UNKNOWN"
+            },
+            sentimentUrl: "http://localhost:3000/sentimentAnalysis",
             src: '',
         };
     },
@@ -59,6 +75,19 @@ const Component = Vue.extend({
             this.response = {words: 'U.S. House panel launches probe obstruction Trump Presidential hopeful Booker, Selma, U.S. failing people Democrats votes block Trump\'s border emergency U.S. Senate Trump big U.S. savings curbing joint South Korea military drills U.S. agency probing fatal Tesla crashes Florida Sunday Ostrich jacket, fake rallies, therapy dogs odd scenes Trump-Russia probe White House host CEOs workforce advisory meeting Trump slams Mueller, mocks critics fiery two-hour speech Bernie Sanders personal hits 2020 campaign trail Trump vows executive order requiring \'free speech\' colleges Explainer: Trump-Russia probe, collusion crime? House panel demands Kushner clearance details White House Washington\'s Inslee puts climate change center presidential bid Centrist Democrats stray votes, roiling House majority party Manafort seeks sentence guidelines Virginia case Warmbier parents blast \'evil\' North Korea regime Trump praises Kim Factbox: Democratic presidential contenders jump 2020 race Warmbier parents blast \'evil\' North Korea regime Trump praises Kim Factbox: Democrats Congress aim Trump multiple probes U.S. increases pressure Maduro sanctions, revokes visas associates'};
             this.resolved = true;
         });
+
+        axios.post(this.sentimentUrl,{
+          text: 'this is test text'
+        })
+        .then((res) => {
+          console.log("received sentiment url response")
+          this.sentimentResponse = res.data;
+          this.sentimentResolved = true;
+        })
+        .catch((e) => {
+          console.log("error in sentiment url call")
+          this.errors.push(e);
+        })
     },
     methods: {
       updateResponse(src: string) {
@@ -77,6 +106,7 @@ const Component = Vue.extend({
     },
     components: {
         chartComponent,
+        leaderboardComponent,
     },
     computed: {
       initSeries: () => {
@@ -101,6 +131,14 @@ const Component = Vue.extend({
       handler(val) {
         this.resolved = false;
         this.resolved = true;
+        this.$forceUpdate();
+      },
+      deep: true,
+    },
+    sentimentResponse: {
+      handler(val) {
+        this.sentimentResolved = false;
+        this.sentimentResolved = true;
         this.$forceUpdate();
       },
       deep: true,
