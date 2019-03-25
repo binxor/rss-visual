@@ -51,15 +51,15 @@ const Component = Vue.extend({
             rssUrl: 'http://localhost:3000/rssString',
             sentimentResolved: false,
             sentimentResponse: {
-              "SentimentScore": {
-                "Mixed": 0, 
-                "Positive": 0, 
-                "Neutral": 0, 
-                "Negative": 0
-              }, 
-              "Sentiment": "UNKNOWN"
+              SentimentScore: {
+                Mixed: 0,
+                Positive: 0,
+                Neutral: 0,
+                Negative: 0,
+              },
+              Sentiment: 'UNKNOWN',
             },
-            sentimentUrl: "http://localhost:3000/sentimentAnalysis",
+            sentimentUrl: 'http://localhost:3000/sentimentAnalysis',
             src: '',
         };
     },
@@ -76,18 +76,16 @@ const Component = Vue.extend({
             this.resolved = true;
         });
 
-        axios.post(this.sentimentUrl,{
-          text: 'this is test text'
+        axios.post(this.sentimentUrl, {
+          text: 'this is test text', // todo - replace with this.response text
         })
         .then((res) => {
-          console.log("received sentiment url response")
           this.sentimentResponse = res.data;
           this.sentimentResolved = true;
         })
         .catch((e) => {
-          console.log("error in sentiment url call")
           this.errors.push(e);
-        })
+        });
     },
     methods: {
       updateResponse(src: string) {
