@@ -3,7 +3,7 @@
         <div id="leaderboard">
             <div id="sentimentContainer">
                 <div id="tilesContainer">
-                    <div :key=key v-for='(val,key) of sentimentResponse.SentimentScore'
+                    <div :key=key v-for='(val,key) of awsSentimentResponse.SentimentScore'
                     class="rating" v-bind:class="getClass(key)">
                         <div class="overallRatingTitle">{{key}}</div> 
                         <div class="ratingText">{{percent(val)}}</div>
@@ -23,7 +23,7 @@ import Highcharts from 'highcharts';
 export default {
     name : 'Leaderboard',
     props : {
-        sentimentResponse: {
+        awsSentimentResponse: {
             type: Object,
             required: true,
         },
@@ -33,7 +33,7 @@ export default {
     },
     mounted() {
         const sentData = [];
-        const scores = this.sentimentResponse.SentimentScore;
+        const scores = this.awsSentimentResponse.SentimentScore;
         for (const s in scores) {
             sentData.push({
                 name: s,

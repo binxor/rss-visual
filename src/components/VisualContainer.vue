@@ -6,8 +6,8 @@
     <button :key=b.key v-for='b of buttons' 
       v-on:click="updateResponse(b.key)">{{b.display}}</button>
     <br/><br/>
-    <span v-if="this.sentimentResolved">
-      <leaderboardComponent :key="leaderKey" v-bind:sentimentResponse="this.sentimentResponse">Leaderboard will replace this text</leaderboardComponent>
+    <span v-if="this.awsSentimentResolved">
+      <leaderboardComponent :key="leaderKey" v-bind:awsSentimentResponse="this.awsSentimentResponse">Leaderboard will replace this text</leaderboardComponent>
     </span>
     <span v-if="this.resolved">
       <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
@@ -29,6 +29,16 @@ import leaderboardComponent from '@/components/leaderboardComponent.vue';
 const Component = Vue.extend({
     data: () => {
         return {
+            awsSentimentResolved: false,
+            awsSentimentResponse: {
+              SentimentScore: {
+                Mixed: 0,
+                Positive: 0,
+                Neutral: 0,
+                Negative: 0,
+              },
+              Sentiment: 'UNKNOWN',
+            },
             buttons: [
               {key: 'business', display: 'Business'},
               {key: 'company', display: 'Company'},
@@ -49,20 +59,9 @@ const Component = Vue.extend({
             response: {words: 'default default default response response'},
             resolved: false,
             rssUrl: 'http://localhost:3000/rssString',
-            sentimentResolved: false,
-            sentimentResponse: {
-              SentimentScore: {
-                Mixed: 0,
-                Positive: 0,
-                Neutral: 0,
-                Negative: 0,
-              },
-              Sentiment: 'UNKNOWN',
-            },
-            sentimentAnalysis: {
             sentimentUrl: 'http://localhost:3000/sentiment',
             src: '',
-        };
+          };
     },
     created() {
         axios.get(this.rssUrl)
@@ -70,17 +69,18 @@ const Component = Vue.extend({
             this.response = res.data;
             this.resolved = true;
 
+            // AWS COMPREHEND SENTIMENT API CALL
             axios.post(this.sentimentUrl, {
-              text: res.data["snippets"].join(),
+              text: res.data["snippets"].join(), 
             })
             .then((res) => {
-              this.sentimentResponse = res.data;
-          this.sentimentResolved = true;
-        })
+              this.awsSentimentResponse = res.data;
+              this.awsSentimentResolved = true;
+            })
             .catch((e) => {
               this.errors.push(e);
             });
-        
+
         })
         .catch((e) => {
             this.errorMsg = 'We haven\'t heard back from our REST API, so here\'s a preview...';
@@ -137,10 +137,10 @@ const Component = Vue.extend({
       },
       deep: true,
     },
-    sentimentResponse: {
+    awsSentimentResponse: {
       handler(val) {
-        this.sentimentResolved = false;
-        this.sentimentResolved = true;
+        this.awsSentimentResolved = false;
+        this.awsSentimentResolved = true;
         this.$forceUpdate();
       },
       deep: true,
