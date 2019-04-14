@@ -59,7 +59,8 @@ const Component = Vue.extend({
               },
               Sentiment: 'UNKNOWN',
             },
-            sentimentUrl: 'http://localhost:3000/sentimentAnalysis',
+            sentimentAnalysis: {
+            sentimentUrl: 'http://localhost:3000/sentiment',
             src: '',
         };
     },
@@ -68,6 +69,18 @@ const Component = Vue.extend({
         .then((res) => {
             this.response = res.data;
             this.resolved = true;
+
+            axios.post(this.sentimentUrl, {
+              text: res.data["snippets"].join(),
+            })
+            .then((res) => {
+              this.sentimentResponse = res.data;
+          this.sentimentResolved = true;
+        })
+            .catch((e) => {
+              this.errors.push(e);
+            });
+        
         })
         .catch((e) => {
             this.errorMsg = 'We haven\'t heard back from our REST API, so here\'s a preview...';
@@ -76,16 +89,7 @@ const Component = Vue.extend({
             this.resolved = true;
         });
 
-        axios.post(this.sentimentUrl, {
-          text: 'this is test text', // todo - replace with this.response text
-        })
-        .then((res) => {
-          this.sentimentResponse = res.data;
-          this.sentimentResolved = true;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
+        
     },
     methods: {
       updateResponse(src: string) {

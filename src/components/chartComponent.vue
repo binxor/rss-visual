@@ -121,3 +121,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#barchart {
+  float: right;
+}
+#wordcloud {
+  float: left;
+}
+</style>
