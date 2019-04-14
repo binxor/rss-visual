@@ -7,9 +7,11 @@
       v-on:click="updateResponse(b.key)">{{b.display}}</button>
     <br/><br/>
     <span v-if="this.awsSentimentResolved">
+      <br/>
       <leaderboardComponent :key="leaderKey" v-bind:awsSentimentResponse="this.awsSentimentResponse">Leaderboard will replace this text</leaderboardComponent>
     </span>
     <span v-if="this.resolved">
+      <br/>
       <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
     </span>
     <div v-if="this.errors.length > 0">

@@ -2,13 +2,7 @@
     <div>
         <div id="leaderboard">
             <div id="sentimentContainer">
-                <div id="tilesContainer">
-                    <div :key=key v-for='(val,key) of awsSentimentResponse.SentimentScore'
-                    class="rating" v-bind:class="getClass(key)">
-                        <div class="overallRatingTitle">{{key}}</div> 
-                        <div class="ratingText">{{percent(val)}}</div>
-                    </div>
-                </div>
+                <div id="tilesContainer">AWS Sentiment: <span v-bind:style="{'color':getColor(dominantTone)}">{{dominantTone}}</span></div>
                 <div id="piechartContainer">
                     <div id="piechart"></div>
                 </div>
@@ -26,10 +20,12 @@ export default {
         awsSentimentResponse: {
             type: Object,
             required: true,
-        },
+        }
     },
     data() {
-        return {};
+        return {
+            dominantTone: ''
+        };
     },
     mounted() {
         const sentData = [];
@@ -37,19 +33,30 @@ export default {
         for (const s in scores) {
             sentData.push({
                 name: s,
-                y: scores[s],
+                y: Math.floor(scores[s] * 1000) / 10,
                 color: this.getColor(s),
             });
         }
+        this.dominantTone = this.getDominantTone(this.awsSentimentResponse);
         this.target = Highcharts.chart('piechart', {
             chart: {
-                type: 'pie',
+                type: 'column',
+                width: 550,
+                height: 150
             },
             title: {
-                text: ' ',
+                text: 'AWS Comprehend Sentiment Scores',
             },
             xAxis: {
                 type: 'category',
+                title: {
+                    text: 'Sentiment'
+                },
+            },
+            yAxis: {
+                title: {
+                    text: 'Percentage (%)'
+                },
             },
             legend: {
                 enabled: false,
@@ -58,8 +65,7 @@ export default {
                 },
             },
             tooltip: {
-                valueSuffix: ' ',
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b><br/>',
+                valueSuffix: ' %',
             },
             plotOptions: {
                 series: {
@@ -71,7 +77,6 @@ export default {
                 },
                 pie: {
                     dataLabels: {
-                        format: '{point.percentage:.1f} %',
                         style: {
                             fontSize: '14px',
                         },
@@ -86,7 +91,7 @@ export default {
             },
             series: [
                 {
-                    name: 'Points',
+                    name: 'Percent',
                     colorByPoint: true,
                     data: sentData,
                 },
@@ -102,27 +107,35 @@ export default {
         },
         getColor: (key) => {
             let color = '';
-            switch (key) {
-                case 'Mixed':
+            switch (key.toLowerCase()) {
+                case 'mixed':
                     color = 'purple';
                     break;
-                case 'Positive':
+                case 'positive':
                     color = 'teal';
                     break;
-                case 'Neutral':
+                case 'neutral':
                     color = 'lightgrey';
                     break;
-                case 'Negative':
+                case 'negative':
                     color = 'red';
                     break;
             }
             return color;
         },
+        getDominantTone: (sr) => {
+            return sr.Sentiment;
+        }
     },
 };
 </script>
 
 <style scoped>
+#leaderboard {
+  /* float: left; */
+  border: 1px solid grey; 
+  border-radius:10px;
+}
 .overallRating {
     border: solid 1px lightgrey;
     border-radius: 10px;
