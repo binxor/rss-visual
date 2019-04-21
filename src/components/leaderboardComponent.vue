@@ -2,10 +2,21 @@
     <div>
         <div id="leaderboard">
             <div id="sentimentContainer">
-                <div id="tilesContainer">AWS Sentiment: <span v-bind:style="{'color':getColor(dominantTone)}">{{dominantTone}}</span></div>
-                <div id="piechartContainer">
-                    <div id="piechart"></div>
-                </div>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="overallRatingTitle overallRating" v-bind:style="{'background-color':getColor(awsDominantTone)}">
+                                {{awsDominantTone}}
+                            </div>
+                            <br/>
+                        </td>
+                        <td>
+                            <div id="columnChartContainer">
+                                <div id="columnChart"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <br/>
@@ -24,10 +35,11 @@ export default {
     },
     data() {
         return {
-            dominantTone: ''
+            awsDominantTone: ''
         };
     },
     mounted() {
+        //AWS
         const sentData = [];
         const scores = this.awsSentimentResponse.SentimentScore;
         for (const s in scores) {
@@ -37,8 +49,8 @@ export default {
                 color: this.getColor(s),
             });
         }
-        this.dominantTone = this.getDominantTone(this.awsSentimentResponse);
-        this.target = Highcharts.chart('piechart', {
+        this.awsDominantTone = this.getawsDominantTone(this.awsSentimentResponse);
+        this.target = Highcharts.chart('columnChart', {
             chart: {
                 type: 'column',
                 width: 550,
@@ -123,9 +135,9 @@ export default {
             }
             return color;
         },
-        getDominantTone: (sr) => {
+        getawsDominantTone: (sr) => {
             return sr.Sentiment;
-        }
+        },
     },
 };
 </script>
@@ -135,20 +147,21 @@ export default {
   /* float: left; */
   border: 1px solid grey; 
   border-radius:10px;
+  width: 70%;
+  margin-left: 15%;
 }
 .overallRating {
     border: solid 1px lightgrey;
     border-radius: 10px;
-    width: 25%;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
     display: inline-block;
     color: white;
+    height: 100%;
 }
 .overallRatingTitle {
-    font-size: 2.5vw;
+    font-size: 4.5vw;
 }
-#piechart {
+#columnChart {
     height: 150px;
 }
 .rating {
@@ -174,5 +187,11 @@ export default {
 }
 .ratingNegative {
     background-color: red;
+}
+table {
+    width: auto;
+}
+td {
+    width: 50%;
 }
 </style>
