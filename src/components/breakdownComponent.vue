@@ -6,11 +6,9 @@
       <!-- <div v-bind:key="k" v-for="(v,k) of sentencesTone" v-if="v.tones && v.tones.length > 0">
                 {{v.tones}}
       </div>-->
-      <br/>
+      <br />
       <div>
-          <div v-bind:key="'td'+k" v-for="(v,k) of sentencesTone">
-            {{v.text}}
-          </div>
+        <div v-bind:key="'td'+k" v-for="(v,k) of sentencesTone">{{v.text}}</div>
       </div>
     </div>
   </div>
@@ -111,9 +109,7 @@ export default {
     Highcharts.chart("radarchart", {
       chart: {
         polar: true,
-        type: "area",
-        width: 550,
-        height: 400
+        type: "area"
       },
       title: {
         text: "IBM Watson Dominant Tones"
@@ -238,6 +234,7 @@ export default {
 #breakdown {
   width: 80%;
   margin-left: 10%;
+  color: black;
 }
 
 #drilldown {
@@ -249,5 +246,4 @@ export default {
   float: right;
   width: 50%;
 }
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div id="home" class>
     <div v-if="this.errors.length > 0">
       <h3 id="errorMessage">{{errorMsg}}</h3>
     </div>
@@ -8,24 +8,26 @@
       v-on:click="updateResponse(b.key)">{{b.display}}</button>
     <br/><br/>
   
-    <div v-if="this.awsSentimentResolved">
+    <div id="leaderboard" v-if="this.awsSentimentResolved">
       <br/>
       <leaderboardComponent :key="leaderKey" v-bind:awsSentimentResponse="this.awsSentimentResponse">Leaderboard will replace this text</leaderboardComponent>
     </div>
 
-    <div v-if="this.resolved">
+    <div id="chartcomponent" v-if="this.resolved">
       <br/>
       <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
+      &nbsp;
     </div>
 
-    <div v-if="this.watsonSentimentResolved">
+    <div id="breakdowncomponent" v-if="this.watsonSentimentResolved">
       <br/>
       <breakdownComponent :key="breakdownkey" v-bind:watsonSentimentResponse="this.watsonSentimentResponse">Breakdown will replace this text</breakdownComponent>
     </div>
     
-    <div v-if="this.errors.length > 0">
+    <div id="errorblock" v-if="this.errors.length > 0">
       <div style="border: 1px solid grey; border-radius:10px;">
-        ERRORS: <pre>{{ this.errors }}</pre>
+        <h3>RUH-ROH!  ERRORS!</h3>
+        <pre>{{ this.errors }}</pre>
       </div>
     </div>
   </div>
@@ -301,10 +303,39 @@ export default Component;
 </script>
 
 <style scoped>
+button {
+  background-color: darkcyan;
+  border: darkcyan;
+  border-radius: 5px;
+  color: #feeffe;
+  height: 2em;
+  font-size: 1.2em;
+}
+
+#hello {
+  background-color: #333;
+}
+
 #errorMessage {
   border: 1px solid grey; 
   border-radius:10px;
   background:#ddd
+}
+
+#leaderboard {
+  background-color: #a64942;
+}
+
+#chartcomponent {
+  background-color: #fe5f55;
+}
+
+#breakdowncomponent {
+  background-color: #fff5c1;
+}
+
+#errorblock {
+  background-color: whitesmoke;
 }
 
 </style>

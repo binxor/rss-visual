@@ -145,8 +145,6 @@ export default {
 <style scoped>
 #leaderboard {
   /* float: left; */
-  border: 1px solid grey; 
-  border-radius:10px;
   width: 70%;
   margin-left: 15%;
 }
