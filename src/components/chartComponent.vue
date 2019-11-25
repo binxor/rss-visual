@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="sentimentcharts">
         <div id="wordcloud"></div>
         <div id="barchart"></div>
     </div>
@@ -123,10 +123,17 @@ export default {
 </script>
 
 <style scoped>
+#sentimentcharts {
+    width: 80%;
+    margin-left: 10%;
+}
+
 #barchart {
   float: right;
+  width: 50%;
 }
 #wordcloud {
   float: left;
+  width: 50%;
 }
 </style>

@@ -13,14 +13,14 @@
       <leaderboardComponent :key="leaderKey" v-bind:awsSentimentResponse="this.awsSentimentResponse">Leaderboard will replace this text</leaderboardComponent>
     </div>
 
-    <div v-if="this.watsonSentimentResolved">
-      <br/>
-      <breakdownComponent :key="breakdownkey" v-bind:watsonSentimentResponse="this.watsonSentimentResponse">Breakdown will replace this text</breakdownComponent>
-    </div>
-
     <div v-if="this.resolved">
       <br/>
       <chartComponent :key="chartKey" :series="this.initSeries" v-bind:response="this.response">Chart component will replace this text</chartComponent>
+    </div>
+
+    <div v-if="this.watsonSentimentResolved">
+      <br/>
+      <breakdownComponent :key="breakdownkey" v-bind:watsonSentimentResponse="this.watsonSentimentResponse">Breakdown will replace this text</breakdownComponent>
     </div>
     
     <div v-if="this.errors.length > 0">
