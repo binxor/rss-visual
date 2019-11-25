@@ -13,10 +13,10 @@
       <leaderboardComponent :key="leaderKey" v-bind:awsSentimentResponse="this.awsSentimentResponse">Leaderboard will replace this text</leaderboardComponent>
     </div>
 
-    <!-- <div v-if="this.watsonSentimentResolved">
+    <div v-if="this.watsonSentimentResolved">
       <br/>
       <breakdownComponent :key="breakdownkey" v-bind:watsonSentimentResponse="this.watsonSentimentResponse">Breakdown will replace this text</breakdownComponent>
-    </div> -->
+    </div>
 
     <div v-if="this.resolved">
       <br/>
@@ -36,7 +36,7 @@ import Vue, { VNode } from 'vue';
 import axios from 'axios';
 import chartComponent from '@/components/chartComponent.vue';
 import leaderboardComponent from '@/components/leaderboardComponent.vue';
-// import breakdownComponent from '@/components/breakdownComponent.vue';
+import breakdownComponent from '@/components/breakdownComponent.vue';
 
 const Component = Vue.extend({
     data: () => {
@@ -247,7 +247,7 @@ const Component = Vue.extend({
       },
     },
     components: {
-      // breakdownComponent,
+      breakdownComponent,
       chartComponent,
       leaderboardComponent,
     },
